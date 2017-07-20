@@ -1,0 +1,276 @@
+######################################################################
+#File:		MTI.txt  
+#L Update:	981020
+#Re:		MTI table
+#       	For details, see mti2.doc by VHL
+#By:    	Eric So 
+#
+#Technical Note:
+# 1. grep only line beginning with !PO or !JF
+# grep ^\![PO,JF] mti.txt | more
+#
+# 2. grep line NOT containing "#" sign
+# grep -v \# mti.txt
+#
+#History
+#
+# 20060630 (jl)
+# added new txn table !PO 0200 000080 XXX 0210 for gnete payment
+# fixed old logon txn table, added bit46 to identified gnete termianl
+# logon and return bit63 with len 16
+# added batch unionpay table at the bottom
+# 2000/03/19 (raymond)
+# added bit 22 to PO and CB, modified b48 to CB for 200 and Internet txn
+#
+# 19990313 (ac)
+# change due to testing with ICBC REVERSAL
+#
+# 19990306 (ac)
+# change CB, POS, bit 54
+#
+# 19990303 (ac)
+# change CB, POS, bit 54
+#
+# 19990303 (es)
+# change JF reversal Bit 60 from ANS ...4 M - to ANS ...4 M M  ^_^ .
+#
+# 19990206 (nw)
+# Add MPS
+#
+# 19990126 (ac)
+# CB 102 PAYMENT, REVERSAL should be ANS, But how about JF (es) ^_^ .
+#
+# 19990112 (alfred)
+# consolidation of ISO8583 message 0f JF
+#
+# 19990109 (alfred)
+# consolidation all ISO8583 message
+#
+# 19981228 (alfred)
+# mti_code 0401 of SAF REVERSAL
+#
+# 981217 (hh)
+# Bit 63 on POS enquiry/payment, Bit 125 for JF enquiry
+#
+# 981123 (hh)
+# Bit 013 changes from 004 (MMDD) to 008 (CCYYMMDD) for Y2K
+# 013 1 0 004 M -  to  013 1 0 008 M -
+#
+# 981114 (hh)
+# PO logon bit 60 changes from "M - " to "- M"
+#
+# 981021 (hh)
+# modified given spectra fax 981021 13:04, bit 044 & bit 048
+# change (es) spelling mistakes from CF to CB
+#
+# 981020 (es)
+# first version
+#
+######################################################################
+#
+#  Definition of field content
+#
+#  a b c d e f
+#    
+#  a - bit number
+#  b - data type (1 = N, 2 = AN, 3 = ANS, 5 = Binary)
+#  c - number of 'L' as in 'LLVAR' or 'LLLVAR', 0 = fixed length
+#  d - max length
+#  e - 'M' = mandatory, 'C' = optional for sending out
+#  f - 'M' = mandatory, 'C' = optional for reply
+#
+######################################################################
+#
+#
+###############################
+#POS Table 1 - 9
+###############################
+#
+#1 Logon
+!PO 0800 960000 XXX 0810
+
+003 1 0 006 M M
+011 1 0 006 M M
+012 1 0 006 - M
+013 1 0 004 - M
+039 2 0 002 - M
+041 3 0 008 M M
+042 3 0 015 C C
+047 3 0 999 M M
+060 3 3 016 M M
+062 3 3 016 - M
+063 3 3 016 - C
+
+#2 Logout
+!PO 0800 970000 XXX 0810
+
+003 1 0 006 M M
+011 1 0 006 M M
+012 1 0 006 - M
+013 1 0 004 - M
+039 2 0 002 - M
+041 3 0 008 M M
+042 3 0 015 M -
+047 3 0 999 M -
+060 3 3 016 M M
+
+#3 Echo
+!PO 0800 980000 XXX 0810
+
+003 1 0 006 M M
+011 1 0 006 M M
+012 1 0 006 - M
+013 1 0 004 - M
+039 2 0 002 - M
+041 3 0 008 M M
+042 3 0 015 M -
+
+#4 Password Config
+!PO 0800 950000 XXX 0810
+
+003 1 0 006 M M
+011 1 0 006 M M
+012 1 0 006 - M
+013 1 0 004 - M
+035 3 2 037 C -
+036 3 3 104 C -
+039 2 0 002 - M
+041 3 0 008 M M
+042 3 0 015 M -
+047 3 0 999 M -
+052 5 0 064 C -
+060 3 3 016 M M
+063 3 3 016 - C
+064 5 0 064 M M
+
+#5 Parameter Download
+!PO 0520 110000 XXX 0530
+
+003 1 0 006 M M
+011 1 0 006 M M
+012 1 0 006 - M
+013 1 0 004 - M
+039 2 0 002 - M
+041 3 0 008 M M
+042 3 0 015 C -
+047 3 0 999 M -
+060 3 3 014 M M
+062 3 3 999 - M
+
+#6 PreQuery
+!PO 0100 100000 XXX 0110
+
+002 1 2 019 C C
+003 1 0 006 M M
+011 1 0 006 M M
+012 1 0 006 - M
+013 1 0 004 - M
+022 1 0 003 M -
+039 2 0 002 - M
+041 3 0 008 M M
+042 3 0 015 M -
+047 3 0 999 M -
+048 2 0 999 M -
+054 2 3 064 - M
+060 3 3 016 M M
+061 3 3 999 - M
+063 3 3 016 - C
+064 5 0 064 M M
+
+#7 Term Stat
+!PO 0100 110000 XXX 0110
+
+003 1 0 006 M M
+011 1 0 006 M M
+012 1 0 006 - M
+013 1 0 004 - M
+022 1 0 003 M -
+039 2 0 002 - M
+041 3 0 008 M M
+042 3 0 015 M -
+047 3 0 999 M -
+048 2 0 999 M -
+054 2 3 064 - M
+060 3 3 016 M M
+061 3 3 999 - M
+063 3 3 016 - C
+064 5 0 064 M M
+
+#8 Print
+!PO 0100 120000 XXX 0110
+
+002 1 2 019 C C
+003 1 0 006 M M
+011 1 0 006 M M
+012 1 0 006 - M
+013 1 0 004 - M
+022 1 0 003 M -
+039 2 0 002 - M
+041 3 0 008 M M
+042 3 0 015 M -
+047 3 0 999 M -
+054 2 3 200 - M
+060 3 3 016 M M
+061 3 3 999 - M
+063 3 3 016 - C
+064 5 0 064 M M
+
+#9 Payment
+!PO 0200 000000 XXX 0210
+
+002 1 2 019 C C
+003 1 0 006 M M
+004 1 0 012 - M
+011 1 0 006 M M
+012 1 0 006 - M
+013 1 0 004 - M
+022 1 0 003 M -
+035 3 2 037 C -
+036 3 3 104 C -
+039 2 0 002 - M
+041 3 0 008 M M
+042 3 0 015 M -
+047 3 0 999 M -
+048 2 0 999 M -
+052 5 0 064 C -
+054 2 3 200 - M
+060 3 3 016 M M
+061 3 3 999 - M
+062 3 3 999 - C
+063 3 3 016 - C
+064 5 0 064 M M
+
+#10 Reversal
+!PO 0400 000000 XXX 0410
+
+003 1 0 006 M M
+011 1 0 006 M M
+012 1 0 006 - M
+013 1 0 004 - M
+022 1 0 003 M -
+035 3 2 037 C -
+036 3 3 104 C -
+039 2 0 002 - M
+041 3 0 008 M M
+042 3 0 015 M -
+047 3 0 999 M -
+052 5 0 064 C -
+060 3 3 016 M M
+061 3 3 006 M -
+063 3 3 016 - C
+064 5 0 064 M M
+
+#11 Program Download
+!PO 0520 130000 XXX 0530
+
+003 1 0 006 M M
+011 1 0 006 M M
+012 1 0 006 - M
+013 1 0 004 - M
+039 2 0 002 - M
+041 3 0 008 M M
+042 3 0 015 C -
+047 3 0 999 M -
+060 3 3 014 M M
+062 3 3 999 - M
+

@@ -1,0 +1,41 @@
+# FILE		: bit_def.txt
+# DESCRIPTION	: This file contain bit definiton of 8583 message
+#		  Used for PEJ/PEC for decode mti, process code and nmic
+#		  when receiving a message from JF/CB
+# FORMAT	:
+#		  [bit position][data type][LLL][lenght]  
+# Histroy	:
+#		  19990101 (ac) first version
+001 5 0 64
+002 1 2 30
+003 1 0 6
+004 1 0 12
+007 1 0 10
+011 1 0 6
+012 1 0 6
+013 1 0 4
+015 1 0 4
+028 2 0 9
+032 1 2 6
+033 1 2 6
+035 4 2 37
+036 4 3 104
+037 2 0 12
+038 3 0 6
+039 2 0 2
+041 3 0 8
+042 3 0 15
+048 3 3 60
+052 5 0 64
+054 2 2 12
+060 3 3 4
+063 3 2 8
+070 1 0 3
+100 1 2 6
+102 1 2 30
+104 3 3 9
+105 3 0 5
+106 3 3 10
+107 3 3 10
+125 3 3 9999
+128 5 0 64
